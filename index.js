@@ -112,24 +112,28 @@ app.post("/removeplayer", async (req, res) => {
         return res.json({ message: "An error occurred while removing the player" });
     }
 });
-
-app.post("/playercount", async (req, res) => {
+app.post("/getuser", async (req, res) => {
     try {
-        const { username } = req.body;
-        let fantasyPlayerData = await FantasyPlayers.findOne({ username: username });
+        const { username, email } = req.body;
+        let user;
 
-        if (fantasyPlayerData) {
-            const playerCount = fantasyPlayerData.players.length;
-            return res.json({ count: playerCount });
-        } else {
-            return res.json({ count: 0 });
+        // Fetch user details by username or email
+        if (username) {
+            user = await User.findOne({ username: username });
+        } else if (email) {
+            user = await User.findOne({ email: email });
         }
-    } catch (err) {
-        console.error("Error retrieving player count:", err);
-        return res.status(500).json({ message: "An error occurred while retrieving the player count" });
+
+        if (user) {
+            return res.json({ user });
+        } else {
+            return res.json({ message: "User not found" });
+        }
+    } catch (error) {
+        console.error("Error retrieving user details:", error);
+        return res.status(500).json({ message: "An error occurred while retrieving the user details" });
     }
 });
-
 app.post("/signup", async (req, res) => {
     try {
         const { email, fullname, username, password, confirmpassword } = req.body;
