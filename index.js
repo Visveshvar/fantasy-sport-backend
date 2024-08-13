@@ -6,7 +6,7 @@ var User = require('./models/users.js');
 var FantasyPlayers = require('./models/players.js');
 var app = express();
 
-var allowedOrigins = ["http://localhost:3000"];
+var allowedOrigins = ["http://localhost:3000", "https://fantasy-sport-frontend.vercel.app"];
 app.use(
     cors({
         origin: allowedOrigins,
